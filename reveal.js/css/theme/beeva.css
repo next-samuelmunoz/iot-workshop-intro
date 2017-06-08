@@ -167,7 +167,7 @@ body {
   padding: .5em;
   padding-left: 2em;
   overflow: auto;
-  /*max-height: 400px;*/
+  max-height: 35em;
   word-wrap: normal;
   font-size: 1.2em;
   line-height: 1.2em;}
