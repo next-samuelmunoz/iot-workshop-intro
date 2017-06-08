@@ -101,13 +101,15 @@ print(THING_ID)
 							<li>DHCP: <a href="https://nodemcu.readthedocs.io/en/master/en/modules/wifi/#wifiapdhcp-module">server</a>, client</li>
 							<li>Power saving</li>
 						</ul>
-
 					</section>
 
 					<section>
 						<h2>Code</h2>
 						<br/>
 						<pre><code src='code/wifi.lua'></code></pre>
+					</section>
+
+					<section data-background-video="img/wifi.mp4" data-background-video-loop="true">
 					</section>
 
 				</section>
@@ -123,13 +125,33 @@ print(THING_ID)
 
 					<section>
 						<h2>Mosquitto</h2>
+						requirements
+						mosquitto-clients
+						mosquitto
 						<br/>
 					</section>
 
 					<section>
 						<h2>Code</h2>
-						<br/>
+						<pre><code src='code/mqtt.lua'></code></pre>
 					</section>
+
+					<section>
+						<h2>Tests</h2>
+						<br/>
+						Open a listener terminal.
+						<pre><code class="bash">
+mosquitto_sub -h 172.24.1.1 -p 1883 -t /# -v
+						</code></pre>
+						<br/>
+						Open a writer terminal
+						<pre><code class="bash">
+mosquitto_pub -h 172.24.1.1 -p 1883 -t '907427/LED' -m "1"
+						</code></pre>
+
+
+					</section>
+
 				</section>
 
 				<!-- ENDING -->
@@ -163,435 +185,7 @@ print(THING_ID)
 					<h1>THE END</h1>
 				</section>
 
-
-
-
-
-					<!-- What is NodeMCU? -->
-					<section>
-
-					<!-- Overview -->
-					<section>
-						<h2>What is NodeMCU?</h2>
-						<img data-src="img/nodemcu-hw.jpg" alt="IoT Device" height=600>
-						<blockquote cite="http://nodemcu.com/index_en.html">
-							"An open-source firmware and development kit that helps you to prototype your IOT product within a few Lua script lines."
-						</blockquote>
-					</section>
-
-					<!-- HW devkit -->
-					<section>
-						<h2>A devkit</h2>
-						<img src="img/ESP8266.jpg" alt="NodeMCU pinout" height="700" />
-						<img src="img/nodemcu-pins.png" alt="NodeMCU pinout" height="700" />
-						<br/>
-						<ul>
-							<li>Based on the Espressif SoC <a href="https://espressif.com/en/products/hardware/esp8266ex/overview">ESP8266</a>.</li>
-							<li>Low cost (under 5$).</li>
-							<li>WiFi!</li>
-						<ul>
-					</section>
-
-					<!-- Firmware + LUA -->
-					<section data-markdown>
-						<textarea data-template>
-							## A firmware
-
-							<br>
-							### Device logic
-							The logic can be defined with a [LUA](https://www.lua.org/) script.
-							* Interpreted language (Python-like).
-							* Fast and lightweight (close to C).
-							* Interactive shell through serial port.
-
-							<br>
-							### Modules and libraries
-							* Most of the cases are covered: gpio, uart, i2c, mqtt, wifi, ntp, ...
-							*	LUA modularization to create your own libraries.
-							* Custom C modules into the firmware.
-						</textarea>
-					</section>
-				</section>
-
-				<!-- Working environment -->
-				<section>
-					<section data-markdown>
-							<textarea data-template>
-							## Working environment
-							<br/>
-							<br/>
-							<br/>
-							The project https://github.com/samuelmh/smh_nodemcu provides a working environment suitable for most purposes.
-							<br/>
-							<br/>
-							<h3>Features</h3>
-							<ul>
-								<li>Interactive terminal.</li>
-								<li>File management.</li>
-								<li>Custom firmware.</li>
-							</ul>
-							</textarea>
-					</section>
-
-					<section>
-						<h2>Set up</h2>
-						<br/><br/>
-						<h3>Requirements</h3>
-						<ul>
-							<li>Git</li>
-							<li>Python2.7</li>
-							<li>Virtualenv</li>
-						</ul>
-						<br/><br/>
-						<h3>Installation</h3>
-						<pre><code class="bash">
-cd
-mkdir projects
-cd projects
-git clone https://github.com/samuelmh/smh_nodemcu
-cd smh_nodemcu
-make install
-						</code></pre>
-					</section>
-
-					<section>
-						<h2>Operative</h2>
-						<br/>
-						Connect your board to the USB port and activate the environment.
-						<pre><code class="bash">
-cd
-cd projects/venvs/smh_nodemcu
-source bin/activate
-						</code></pre>
-						<br/><br/>
-						<h3>Examples</h3>
-						<pre><code class="bash">
-nodemcu --help  #Print help
-
-nodemcu terminal  #Connect to the interactive terminal
-nodemcu terminal --help  #Print the help related to the "terminal" command
-nodemcu terminal --file=&ltfile&gt  #Send a file and connect to the terminal
-
-nodemcu file ls  #List the files stored in the device
-nodemcu file add &ltorigin&gt &ltdestination&gt  #Copy a file from the computer to the device
-nodemcu file --help  #Print the the help related to the "file" command
-						</code></pre>
-					</section>
-
-					<section>
-						<h2>Flashing the firmware</h2>
-						<br/><br/>
-						Do not asume the board comes with your desired firmware.<br/>
-						It is a good practice to use a familiar one.<br/>
-						<br/><br/>
-						<pre><code class="bash">
-make flash-float-4mb-all
-						</pre></code>
-
-					</section>
-				</section>
-
-				<!-- LUA Intro -->
-				<section>
-					<section data-markdown>
-							<textarea data-template>
-							## A bit of LUA
-
-							<br>
-							### Features
-							* **Interpreted language**, designed for embedded systems.
-							* **Paradigm:** scripting, imperative <small>(procedural, prototype-based, object-oriented)</small>, functional.
-							* **[Typing](https://www.lua.org/pil/2.html)**: dynamic, strong, duck.
-							* Python-like.
-
-							<br>
-							### Example
-							```lua
-							-- defines a factorial function
-							function fact (n)
-								if n == 0 then
-									return 1
-								else
-									return n * fact(n-1)
-								end
-							end
-
-							print("enter a number:")
-							a = io.read("*number")        -- read a number
-							print(fact(a))
-							```
-							</textarea>
-					</section>
-
-
-					<section data-markdown>
-							<textarea data-template>
-							## Variables
-
-							<br>
-							### Types
-							There are eight basic types in Lua: _nil_, _boolean_, _number_, _string_, _userdata_, _function_, _thread_, and _table_.
-
-							```lua
-							print(type(a))  -- Undefined
-							a = 5
-							print(type(a))  -- Number
-							a = "asd"
-							print(type(a))  -- Dynamic typing
-							```
-
-							### Scope
-							```lua
-							function f()
-								x = 1
-								local y = 2
-							end
-							f()
-							print(x)  -- Global variable
-							print(y)  -- Undefined
-							```
-							</textarea>
-					</section>
-
-
-					<section data-markdown>
-							<textarea data-template>
-							## Conditional
-
-							<br>
-							### if - elseif - else
-							```lua
-if <condition> then
-  <statement>
-elseif <condition> then
-  <statement>
-else
-  <statement>
-end
-							```
-							</textarea>
-					</section>
-
-
-					<section data-markdown>
-							<textarea data-template>
-							## Loops
-
-							<br>
-							### While
-							```lua
-while <condition>
-	<statement>
-end
-							```
-
-							### Repeat
-							```lua
-repeat
-	<statement>
-until <condition>
-							```
-
-							### Numeric for
-							```lua
-for <var>=<first_value>,<last_value>,<step> do
-  <statement>
-end
-							```
-							<br>
-							</textarea>
-					</section>
-
-					<section data-markdown>
-							<textarea data-template>
-							## Functions
-
-							<br>
-							Modularize & reuse your code!
-							```lua
-function(<parameter_0>,... , <parameter_n>)
-  <statement>
-	return(<value>)
-end
-							```
-							<br>
-							</textarea>
-					</section>
-
-
-					<section data-markdown>
-							<textarea data-template>
-							## Data structures
-
-							<br>
-							[**Tables**](https://www.lua.org/pil/11.html) in Lua are not a data structure; they are the data structure.
-
-							All structures that other languages offer:
-							* arrays
-							* records
-							* lists
-							* queues
-							* sets
-
-							are represented with tables in Lua.
-
-							More to the point, tables implement all these structures efficiently.
-
-							<br>
-							</textarea>
-					</section>
-				</section>
-
-
-
-				<!-- Output -->
-				<section>
-					<section data-markdown>
-							<textarea data-template>
-							## Output
-							<br/>
-							Set the voltage of a pin (actuator).
-							* Low: 0V
-							* High: 3,3V
-
-							<br/>
-							*It is possible to fake intermediate values with Pulse Width Modulation (PWM).*<br/><br/>
-							![](img/pwm.gif)<br/><br/>
-							</textarea>
-					</section>
-
-					<section>
-						<h2>Hardware</h2>
-						<br/><br/>
-						<img src="img/led.png" class="plain" />
-					</section>
-
-					<section>
-						<h2>Code</h2>
-						<br/>
-						<ol>
-								<li>Configure the device</li>
-								<li>Set pin to high value</li>
-								<li>Wait</li>
-								<li>Set pin to low value</li>
-								<li>Wait</li>
-								<li>Repeat!</li>
-						</ol>
-						<br/>
-						<br/>
-						<pre><code src='code/led.lua'></code></pre>
-					</section>
-
-					<section data-background-video="img/good_job.mp4" data-background-video-loop="true">
-					</section>
-				</section>
-
-				<!-- Input -->
-				<section>
-					<section data-markdown>
-							<textarea data-template>
-							## INPUT
-
-							<br/>
-							Read the voltage of a pin (sensor).
-							* Low: 0V
-							* High: 3,3V
-
-							<br/>
-							The pin must always receive a value.<br/>
-							If it is not connected, the read value will be random.<br/>
-							Use a pullup/pulldown resistor to set a default read value.<br/>
-							NodeMCU hardware provides this functionality!<br/><br/>
-							![](img/pullup.jpg)
-							</textarea>
-					</section>
-
-					<section>
-						<h2>Hardware</h2>
-						<br/><br/>
-						<img src="img/button.png" class="plain" />
-					</section>
-
-					<section>
-						<h2>Code</h2>
-						<br/>
-						<ol>
-							<li>Configure the device</li>
-							<li>Set the LED to the button value</li>
-							<li>Wait</li>
-							<li>Repeat!</li>
-						</ol>
-						<br/>
-						<br/>
-						<pre><code src="code/button.lua"></code></pre>
-					</section>
-
-					<section data-background-video="img/loop.mp4" data-background-video-loop="true">
-					</section>
-
-				<!-- </section> -->
-
-				<!-- Interruptions -->
-				<!-- <section> -->
-					<section>
-						<h2>INTERRUPTIONS</h2>
-						<br/><br/><br/>
-						Call a function asynchronously when the input value of a pin changes.
-						<br/><br/>
-						<ul>
-							<li>up: rising edge</li>
-							<li>down: falling edge</li>
-							<li>both: both edges</li>
-							<li>low: low level</li>
-							<li>high: high level</li>
-						</ul>
-						<br/>
-						<br/>
-						<a href="https://electronics.stackexchange.com/questions/21886/what-does-edge-triggered-and-level-triggered-mean">Difference</a> between edges and levels.
-					</section>
-
-					<section>
-						<h2>Code</h2>
-						<br/>
-						<ol>
-							<li>Configure the device</li>
-							<li>Define the callback function</li>
-							<li>Set the trigger</li>
-							<li>Wait for an event!</li>
-						</ol>
-						<br/>
-						<br/>
-						<pre><code src='code/button_int.lua'></code></pre>
-					</section>
-
-					<section data-background-video="img/waiting.mp4" data-background-video-loop="true">
-					</section>
-				</section>
-
-
-				<!-- TODO other course -->
-				<!-- Power saving -->
-				<!-- <section>
-					<section data-markdown>
-							<textarea data-template>
-							## Power Saving - sleep
-							</textarea>
-					</section>
-					<section data-background-video="img/sleep.mp4" data-background-video-loop="true">
-					</section>
-
-					<section data-background="img/awake.gif" data-background-position="top">
-					</section>
-
-				</section> -->
-
-
-
-
-
-
 			</div>
-
 		</div>
 
 		<script src="lib/js/head.min.js"></script>
