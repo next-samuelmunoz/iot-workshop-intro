@@ -44,9 +44,9 @@ function print_ip()
   addr, nm, gw = wifi.sta.getip()
   print("[WIFI] GOTIP: "..addr)
   -- Configure Pins
-  gpio.mode(pin_led, gpio.OUTPUT)
-  gpio.mode(pin_button, gpio.INT, gpio.PULLUP)
-  gpio.trig(pin_button, "down", button_cb)
+  gpio.mode(PIN_LED, gpio.OUTPUT)
+  gpio.mode(PIN_BUTTON, gpio.INT, gpio.PULLUP)
+  gpio.trig(PIN_BUTTON, "down", button_cb)
   -- Configure MQTT connection
   MQTT_CLIENT = mqtt.Client(THING_ID, 120)
   MQTT_CLIENT:on("message", mqtt_led)

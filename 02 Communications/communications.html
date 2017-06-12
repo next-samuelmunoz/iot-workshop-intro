@@ -58,14 +58,14 @@
 						<h2>Modularize your code!</h2>
 						<br/>
 						It is a good practice to store configuration constants on a separated file.<br/><br/>
-						File: "config.lua"
+						Modify the file "config.lua" to your needs
 						<pre><code src='code/config.lua'></code></pre>
 					</section>
 
 					<section>
 						<h2>Configuration file</h2>
 						<br/><br/>
-						<h4>Upload config.lua to the board</h4>
+						<h4>Upload "config.lua" to the board</h4>
 						<pre><code class="bash">
 # Copy the configuration file
 nodemcu file add config.lua config.lua
@@ -118,17 +118,55 @@ print(THING_ID)
 				<!-- MQTT -->
 				<section>
 					<section>
-						<h2>MQTT module</h2>
-						<br/>
-
+						<h2>MQTT</h2>
+						<br/><br/>
+						<ul>
+							<li>MQTT -> Message Queue Telemetry Transport</li>
+							<li>Publish - subscribe model</li>
+							<li>Simple, lightweight, low-bandwidth</li>
+							<li>QoS: reliability and assurance of delivery</li>
+							<li>Ideal for M2M or IoT communications</li>
+						</ul>
 					</section>
 
 					<section>
-						<h2>Mosquitto</h2>
-						requirements
-						mosquitto-clients
-						mosquitto
-						<br/>
+						<h2>MQTT module</h2>
+						<br/><br/><br/>
+						The <a href="https://nodemcu.readthedocs.io/en/master/en/modules/mqtt/">"mqtt"</a> module handles the MQTT capabilities.
+						<br/><br/>
+						Some features:
+						<br/><br/>
+						<ul>
+							<li><a href="https://nodemcu.readthedocs.io/en/master/en/modules/mqtt/#mqttclient">Object</a>-based.</li>
+							<li><a href="https://nodemcu.readthedocs.io/en/master/en/modules/mqtt/#mqttclientpublish">Publish</a></li>
+							<li><a href="https://nodemcu.readthedocs.io/en/master/en/modules/mqtt/#mqttclientsubscribe">Subscribe</a>/<a href="https://nodemcu.readthedocs.io/en/master/en/modules/mqtt/#mqttclientunsubscribe">unsubscribe</a></li>
+							<li><a href="https://nodemcu.readthedocs.io/en/master/en/modules/mqtt/#mqttclienton">Event-based</a></li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Programs</h2>
+						<h4>MQTT BROKER & CLIENT</h4>
+						<pre><code class="bash">
+# Client
+apt-get install mosquitto-clients
+# Broker
+docker pull eclipse-mosquitto  # Docker image
+docker create -p 1883:1883 -p 9001:9001 --name iot-test-mqtt eclipse-mosquitto  # Create image
+						</code></pre>
+						<h4>Broker operative</h4>
+						<pre><code class="bash">
+docker start iot-test-mqtt  # Start the container
+docker stop iot-test-mqtt  # Stop the container
+docker rm iot-test-mqtt  # Delete the container
+						</code></pre>
+						<h4>Test</h4>
+						<pre><code class="bash">
+# Terminal A
+mosquitto_sub -h localhost -p 1883 -t '#' -v
+# Terminal B
+mosquitto_pub -h localhost -p 1883 -t "topic/subtopic" -m "This is a message"
+						</code></pre>
 					</section>
 
 					<section>
@@ -139,14 +177,24 @@ print(THING_ID)
 					<section>
 						<h2>Tests</h2>
 						<br/>
+						Start the MQTT broker
+						<pre><code class="bash">
+docker start test-mqtt
+						</code></pre>
+						<br/>
 						Open a listener terminal.
 						<pre><code class="bash">
-mosquitto_sub -h 172.24.1.1 -p 1883 -t /# -v
+mosquitto_sub -h localhost -p 1883 -t '#' -v
+# Press the NodeMCU button and see the message
 						</code></pre>
 						<br/>
 						Open a writer terminal
 						<pre><code class="bash">
-mosquitto_pub -h 172.24.1.1 -p 1883 -t '907427/LED' -m "1"
+# Switch the LED on
+mosquitto_pub -h localhost -p 1883 -t '&ltTHING_ID&gt/LED' -m "1"
+
+# Switch the LED off
+mosquitto_pub -h localhost -p 1883 -t '&ltTHING_ID&gt/LED' -m "0"
 						</code></pre>
 
 
@@ -167,16 +215,20 @@ mosquitto_pub -h 172.24.1.1 -p 1883 -t '907427/LED' -m "1"
 					<section data-markdown>
 						<textarea data-template>
 							## Links and references
-							<br>
-							<br>
+							<br/>
+							<br/>
 							### MQTT
 							* Mosquitto - <small>https://mosquitto.org/</small>
 							* Topics best practices - <small>http://www.hivemq.com/blog/mqtt-essentials-part-5-mqtt-topics-best-practices</small>
 
-							<br>
+							<br/>
 							### NodeMCU
 							* wifi module - <small>https://nodemcu.readthedocs.io/en/master/en/modules/wifi/</small>
 							* mqtt module - <small>https://nodemcu.readthedocs.io/en/master/en/modules/mqtt/</small>
+
+							<br/>
+							### Docker
+							* Docker installation - <small>https://docs.docker.com/engine/installation/</small>
 						</textarea>
 					</section>
 				</section>
