@@ -78,7 +78,7 @@ cd ..
 						<h4>Open a terminal to monitor</h4>
 						<pre><code class="bash">
 # Launch your local MQTT broker
-docker start test-mqtt
+docker run --rm -ti -p 127.0.0.1:1883:1883 eclipse-mosquitto mosquitto -v
 # Connect on a terminal
 mosquitto_sub  -h localhost -p 1883 -t '#' -v
 						</pre></code>
